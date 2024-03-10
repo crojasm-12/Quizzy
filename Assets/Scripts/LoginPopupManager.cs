@@ -1,96 +1,142 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Networking;
-using UnityEngine.UI;
 using TMPro;
-using UnityEngine.Animations.Rigging;
-using static System.Net.Mime.MediaTypeNames;
+using System;
+using System.Text.RegularExpressions;
 
 
 public class LoginPopupManager : MonoBehaviour
 {
     public GameObject Popup_Login;
+    public GameObject Popup_Forgot;
 
-    public GameObject Text_UI;
-    public GameObject Text_Password;
+    public TMP_InputField emailAddress;
 
+    public TMP_InputField userId;
+    public TMP_InputField password;
 
-    private string _userId;
-    private string _password;
+    public TextMeshProUGUI Login_Error_Message;
+    public TextMeshProUGUI Forgot_Error_Message;
 
     void Start()
     {
+        ShowLoginPopup();
+        ShowForgotPopup(false);
+        Screen.orientation = ScreenOrientation.Portrait;
+    }
+
+    private void ShowLoginPopup(bool show = true)
+    {
         if (Popup_Login != null)
         {
-            Popup_Login.SetActive(true); // Make the login popup visible
-            Screen.orientation = ScreenOrientation.Portrait;
+            Popup_Login.SetActive(show);
         }
-    }
-
-    IEnumerator PostRequest(string url, string json)
-    {
-        var uwr = new UnityWebRequest(url, "POST");
-        byte[] jsonToSend = new System.Text.UTF8Encoding().GetBytes(json);
-        uwr.uploadHandler = (UploadHandler)new UploadHandlerRaw(jsonToSend);
-        uwr.downloadHandler = (DownloadHandler)new DownloadHandlerBuffer();
-        uwr.SetRequestHeader("Content-Type", "application/json");
-
-        yield return uwr.SendWebRequest();
-
-        if (uwr.result == UnityWebRequest.Result.ConnectionError)
+        if (Login_Error_Message != null)
         {
-            Debug.LogError("Error While Sending: " + uwr.error);
+            Login_Error_Message.text = String.Empty;
+            Login_Error_Message.gameObject.SetActive(false);
+            return;
         }
-        else
+    }
+
+    private void ShowLoginError(string error)
+    {
+        if (Login_Error_Message != null)
         {
-            Debug.Log("Received: " + uwr.downloadHandler.text);
-            // Here you can handle the received token as needed
+            Login_Error_Message.text = error;
+            Login_Error_Message.gameObject.SetActive(true);
         }
     }
 
-    public void ReadUserID(string userId)
+    private void ShowForgotPopup(bool show = true)
     {
-
-        GameObject ui = Popup_Login.GetComponent<GameObject>();
-        Debug.Log($"UserId: [{userId}]");
+        if (Popup_Forgot != null)
+        {
+            Popup_Forgot.SetActive(show);
+        }
+        if (Forgot_Error_Message != null)
+        {
+            Forgot_Error_Message.text = String.Empty;
+            Forgot_Error_Message.gameObject.SetActive(false);
+        }
+    }
+    
+    private void ShowForgotError(string error)
+    {
+        if (Forgot_Error_Message != null)
+        {
+            Forgot_Error_Message.text = error;
+            Forgot_Error_Message.gameObject.SetActive(true);
+        }
     }
 
-    public void ReadPassword(string password)
+    public void OnForgot()
     {
-        Debug.Log($"Password: [{password}]");
+        ShowLoginPopup(false);
+        ShowForgotPopup();
+    }
+
+    public void OnHaveAccount()
+    {
+        ShowForgotPopup(false);
+        ShowLoginPopup();
+    }
+
+    public void OnSendEmail()
+    {
+        if (!IsValidEmail(emailAddress.text))
+        {
+            ShowForgotError("Invalid EMail address.");
+            return;
+        }
+        Debug.Log(emailAddress.text);
+        ShowForgotPopup(false);
+        ShowLoginPopup();
     }
 
     public void OnLogin()
     {
-        //_userId = Text_UI.text;
-        //_password = Text_Password.text;
-        TMP_InputField[] texts = Popup_Login.GetComponentsInChildren<TMP_InputField>(true);
-        foreach (var text in texts)
+        if (userId.text.Length == 0 || password.text.Length == 0)
         {
-            if (text.gameObject.name == "InputField_ID")
-            {
-                _userId = text.text;
-            }
-            else if (text.gameObject.name == "InputField_Password")
-            {
-                _password = text.text;
-            }
+            ShowLoginError("NickName and Password cannot be Empty.");
+            Login_Error_Message.gameObject.SetActive(true);
+            return;
         }
+
 
         HttpService httpService;
 
         httpService = gameObject.AddComponent<HttpService>();
         httpService.Initialize("https://api.tomorrow-notebook.com");
 
-        string jsonPayload = $"{{ \"email\": \"{_userId}\", \"password\": \"{_password}\" }}";
+        string jsonPayload = $"{{ \"email\": \"{userId.text}\", \"password\": \"{password.text}\" }}";
         StartCoroutine(httpService.Post("/api/idm/v1/logInLocal", null, jsonPayload, (response) =>
             {
-                Popup_Login.SetActive(false);
-                Screen.orientation = ScreenOrientation.LandscapeLeft;
-                Debug.Log("Response: " +  response);
-            }
-        ));
+                try
+                {
+                    UserData userData = JsonUtility.FromJson<UserData>(response);
+
+                    DataStorage.Instance.StoreData("UserData", userData);
+                    Debug.Log("Response: " + DataStorage.Instance.GetData<UserData>("UserData"));
+                    ShowLoginPopup(false);
+                    Screen.orientation = ScreenOrientation.LandscapeLeft;
+                }
+                catch (Exception e)
+                {
+                    Debug.Log(e.ToString());
+                }
+            },
+            (error) =>
+            {
+                ShowLoginError("Invalid NickName or Password.");
+            }));
     }
 
+    private bool IsValidEmail(string email)
+    {
+        if (string.IsNullOrEmpty(email))
+            return false;
+
+        string emailPattern = @"^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$";
+        return Regex.IsMatch(email, emailPattern);
+    }
 }
