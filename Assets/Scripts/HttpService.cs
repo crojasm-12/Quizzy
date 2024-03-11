@@ -10,9 +10,9 @@ public class HttpService : MonoBehaviour
 {
     private string baseUrl;
 
-    public void Initialize(string baseUrl)
+    public HttpService()
     {
-        this.baseUrl = baseUrl;
+        this.baseUrl = "https://api.tomorrow-notebook.com";
     }
 
     public IEnumerator Get(string endpoint, Dictionary<string, string> headers, Action<string> sucessCallback, Action<string> errorCallback = null)
