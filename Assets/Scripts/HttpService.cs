@@ -1,10 +1,8 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Networking;
-using System.Text;
 using System;
 using System.Collections.Generic;
-using UnityEditor.PackageManager.Requests;
 
 public class HttpService : MonoBehaviour
 {

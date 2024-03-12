@@ -7,6 +7,7 @@ public class LoginPanel : MonoBehaviour
     private ForgotPasswordPanel forgotPasswordPanel;
     private InitialBackgroundPanel initialBackgroundPanel;
     private SignUpPanel signUpPanel;
+    private MainFrame mainFrame;
 
     public GameObject Panel;
     public TextMeshProUGUI ErrorMessage;
@@ -15,20 +16,13 @@ public class LoginPanel : MonoBehaviour
 
     void Awake() // It's better to use Awake to ensure that references are set before any Start methods call them
     {
+        mainFrame = FindFirstObjectByType<MainFrame>();
         forgotPasswordPanel = FindFirstObjectByType<ForgotPasswordPanel>();
-        if (forgotPasswordPanel == null)
+        initialBackgroundPanel = FindFirstObjectByType<InitialBackgroundPanel>();
+        signUpPanel = FindFirstObjectByType<SignUpPanel>();
+        if (forgotPasswordPanel == null || initialBackgroundPanel == null || signUpPanel == null)
         {
             Debug.LogError("ForgotPasswordPanel instances not found in LoginPanel!");
-        }
-        initialBackgroundPanel = FindFirstObjectByType<InitialBackgroundPanel>();
-        if (initialBackgroundPanel == null)
-        {
-            Debug.LogError("InitialBackgroundPanel instances not found in LoginPanel!");
-        }
-        signUpPanel = FindFirstObjectByType<SignUpPanel>();
-        if (signUpPanel == null)
-        {
-            Debug.LogError("SignUpPanel instances not found in LoginPanel!");
         }
     }
 
@@ -90,6 +84,7 @@ public class LoginPanel : MonoBehaviour
                 HidePanel();
                 Screen.orientation = ScreenOrientation.LandscapeLeft;
                 initialBackgroundPanel.HidePanel();
+                mainFrame.ShowPanel();
             }
             catch (Exception e)
             {

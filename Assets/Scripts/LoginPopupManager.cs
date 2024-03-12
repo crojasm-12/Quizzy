@@ -1,7 +1,4 @@
 using UnityEngine;
-using TMPro;
-using System;
-using System.Text.RegularExpressions;
 
 
 public class LoginPopupManager : MonoBehaviour
@@ -9,9 +6,11 @@ public class LoginPopupManager : MonoBehaviour
 
     private LoginPanel loginPanel;
     private ForgotPasswordPanel forgotPasswordPanel;
+    private InitialBackgroundPanel initialBackgroundPanel;
 
     void Start()
     {
+        initialBackgroundPanel.ShowPanel();
         loginPanel.ShowPanel();
         forgotPasswordPanel.HidePanel();
         Screen.orientation = ScreenOrientation.Portrait;
@@ -21,8 +20,9 @@ public class LoginPopupManager : MonoBehaviour
     {
         loginPanel = FindFirstObjectByType<LoginPanel>();
         forgotPasswordPanel = FindFirstObjectByType<ForgotPasswordPanel>();
+        initialBackgroundPanel = FindFirstObjectByType<InitialBackgroundPanel>();
 
-        if (loginPanel == null || forgotPasswordPanel == null)
+        if (loginPanel == null || forgotPasswordPanel == null || initialBackgroundPanel == null)
         {
             Debug.LogError("PanelController instances not found in the scene!");
         }
