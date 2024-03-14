@@ -5,6 +5,7 @@ using UnityEngine;
 public class MainScene : MonoBehaviour
 {
     private MissionsPanel missionsPanel;
+    private ShopPanel shopPanel;
 
     public GameObject Panel;
 
@@ -21,33 +22,44 @@ public class MainScene : MonoBehaviour
     void Awake() // It's better to use Awake to ensure that references are set before any Start methods call them
     {
         missionsPanel = FindFirstObjectByType<MissionsPanel>();
-        if (missionsPanel == null)
+        shopPanel = FindFirstObjectByType<ShopPanel>();
+        if (missionsPanel == null || shopPanel == null)
         {
-            Debug.LogError("MissionsPanel instances not found in MainScene!");
+            Debug.LogError("MissionsPanel or ShopPanel instances not found in MainScene!");
         }
     }
 
+    public void OnShopPanel()
+    {
+        HidePanel();
+        shopPanel.ShowPanel();
+    }
 
     public void OnMathematics()
     {
         HidePanel();
+        missionsPanel.SetTopic(TOPICS.MATH);
         missionsPanel.ShowPanel();
-        Debug.Log("Clicked on Mathemathics");
     }
 
     public void OnLanguageArts()
     {
-        Debug.Log("Clicked on Language Arts");
+        HidePanel();
+        missionsPanel.SetTopic(TOPICS.LANGUAGE_ARTS);
+        missionsPanel.ShowPanel();
     }
 
     public void OnSocialStudies()
     {
-        Debug.Log("Clicked on Social Studies");
+        HidePanel();
+        missionsPanel.SetTopic(TOPICS.SOCIAL_STUDIES);
+        missionsPanel.ShowPanel();
     }
 
     public void OnScience()
     {
-        Debug.Log("Clicked on Science");
+        HidePanel();
+        missionsPanel.SetTopic(TOPICS.SCIENCE);
+        missionsPanel.ShowPanel();
     }
-
 }

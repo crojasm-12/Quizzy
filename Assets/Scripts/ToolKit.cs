@@ -50,5 +50,7 @@ public class ToolKit
 
         return Regex.IsMatch(password, passwordPattern);
     }
+
+
 }
 
