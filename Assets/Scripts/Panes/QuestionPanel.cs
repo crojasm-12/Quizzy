@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using TMPro;
 using UnityEngine;
 
@@ -9,10 +10,45 @@ public class QuestionPanel : MonoBehaviour
     private SkillQuestion _skillQuestion;
     private FullSkill _skill;
 
+    private AnswerChoices answerChoices; // List of topics in the mission panel
+
     private ToastPanel toastPanel;
     public GameObject Panel;
+    public GameObject particlesEffect;
 
     public TextMeshProUGUI Question;
+    public TextMeshProUGUI AnswerFeedback;
+
+    // Reward Panel
+    public TextMeshProUGUI TotalScore;
+    public TextMeshProUGUI TotalReward;
+    public TextMeshProUGUI ElapsedTime;
+
+    // Sounds
+    public TadaaAudio tadaaAudio;
+    public FailAudio failAudio;
+
+
+    private float _delay = 3f;
+    private float _elapsedTime = 0f;
+    private float _totalReward = 0f;
+    private int _totalQuestions = 0;
+    private int _totalCorrect = 0;
+    private bool _activeQuestion = false;
+
+    private float _questionValue = 0.15f;
+
+    private void Update()
+    {
+        _elapsedTime += Time.deltaTime; 
+
+        int hours = (int)(_elapsedTime / 3600);
+        int minutes = (int)((_elapsedTime % 3600) / 60);
+        int seconds = (int)(_elapsedTime % 60);
+        ElapsedTime.text = string.Format("{0:D2}h {1:D2}m {2:D2}s", hours, minutes, seconds);
+        TotalScore.text = string.Format("{0:D3} / {1:D3}", _totalCorrect, _totalQuestions);
+        TotalReward.text = _totalReward.ToString("C", CultureInfo.CreateSpecificCulture("en-US"));
+    }
 
     public FullSkill Skill
     {
@@ -38,48 +74,46 @@ public class QuestionPanel : MonoBehaviour
 
     public void OnSubmit()
     {
-
-
         ShowQuestion();
     }
 
+    private void OnSelectedChoice(string answer)
+    {
+        if (_skillQuestion != null &&
+            _skillQuestion.answer != null &&
+            _skillQuestion.answer.content.Count > 0 &&
+            _activeQuestion)
+        {
+            if (_skillQuestion.answer.content[0] == answer)
+            {
+                _totalCorrect++;
+                _totalReward += _questionValue;
+                AnswerFeedback.text = "Correct!!!";
+                AnswerFeedback.color = Color.green;
+                particlesEffect.SetActive(true);
+                tadaaAudio.PlayAudio();
+            }
+            else
+            {
+                failAudio.PlayAudio();
+                AnswerFeedback.text = "Wrong!!!";
+                AnswerFeedback.color = Color.red;
+            }
+            AnswerFeedback.gameObject.SetActive(true);
+            StartCoroutine(HideAnswerFeedback(_delay));
+        }
+        _activeQuestion = false;
+    }
+
+    private IEnumerator HideAnswerFeedback(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        AnswerFeedback.gameObject.SetActive(false);
+        particlesEffect.SetActive(false);
+        failAudio.StopAudio();
+        tadaaAudio.StopAudio();
+    }
     private void ShowQuestion()
-    {
-        if (GetNextQuestion())
-        {
-            Question.text = _skillQuestion.question.content[0];
-        }
-    }
-
-    private bool GetNextQuestion()
-    {
-        if (_skill != null)
-        {
-
-            _skillQuestion = null;
-            int retries = 4;
-            while (retries > 0)
-            {
-                GetSkills();
-                if (_skillQuestion != null)
-                    break;
-                retries--;
-            }
-            if (_skillQuestion == null)
-            {
-                toastPanel.ShowError("System Error. Go Back and Start Again");
-                return false;
-            }
-            return true;
-        }
-        else
-        {
-            toastPanel.ShowError("Skill Not Defined. Go Back and Start Again");
-            return false;
-        }
-    }
-
-    private void GetSkills()
     {
         HttpService httpService;
 
@@ -96,6 +130,13 @@ public class QuestionPanel : MonoBehaviour
                 {
                     SkillQuestionRespose skillQuestionResponse = JsonUtility.FromJson<SkillQuestionRespose>(response);
                     _skillQuestion = skillQuestionResponse.data;
+                    Question.text = _skillQuestion.question.content[0];
+                    if (_skillQuestion.type == "MultipleChoice")
+                    {
+                        answerChoices.ShowChoices(_skillQuestion.choice.content);
+                    }
+                    _activeQuestion = true;
+                    _totalQuestions++;
                 }
                 catch (Exception e)
                 {
@@ -116,6 +157,12 @@ public class QuestionPanel : MonoBehaviour
     void Awake()
     {
         toastPanel = FindFirstObjectByType<ToastPanel>();
+        answerChoices = FindFirstObjectByType<AnswerChoices>();
+
+        tadaaAudio = FindFirstObjectByType<TadaaAudio>();
+        failAudio = FindFirstObjectByType<FailAudio>();
+
+        answerChoices.onChoiceClicked.AddListener(OnSelectedChoice);
     }
 
 }

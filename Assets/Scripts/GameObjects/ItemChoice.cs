@@ -3,7 +3,7 @@ using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using TMPro;
 
-public class ItemTopic : MonoBehaviour, IPointerClickHandler
+public class ItemChoice : MonoBehaviour, IPointerClickHandler
 {
     public string guid;
     public UnityEvent<string> onClick;

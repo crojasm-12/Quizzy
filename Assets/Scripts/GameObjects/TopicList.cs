@@ -40,7 +40,7 @@ public class TopicList : MonoBehaviour
     {
         GameObject newItem = Instantiate(itemPrefab, contentPanel);
         newItem.GetComponentInChildren<TextMeshProUGUI>().text = name;
-        ItemTopic itemTopic = newItem.GetComponent<ItemTopic>();
+        ItemChoice itemTopic = newItem.GetComponent<ItemChoice>();
         itemTopic.InitializeItem(id, name);
         itemTopic.onClick.AddListener(OnItemClick);
     }

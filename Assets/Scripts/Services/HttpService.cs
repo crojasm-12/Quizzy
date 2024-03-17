@@ -42,30 +42,31 @@ public class HttpService : MonoBehaviour
 
     public IEnumerator Post(string endpoint, Dictionary<string, string> headers, string jsonPayload, Action<string> sucessCallback, Action<string> errorCallback = null)
     {
-            using (UnityWebRequest request = UnityWebRequest.Post(baseUrl + endpoint, jsonPayload, "application/json"))
-            {
-                if (headers != null)
-                {
-                    foreach (KeyValuePair<string, string> header in headers)
-                    {
-                        request.SetRequestHeader(header.Key, header.Value);
-                    }
-                }
-                yield return request.SendWebRequest();
+        UnityWebRequest request = new UnityWebRequest(baseUrl + endpoint, "POST");
+        byte[] jsonToSend = new System.Text.UTF8Encoding().GetBytes(jsonPayload);
+        request.uploadHandler = (UploadHandler)new UploadHandlerRaw(jsonToSend);
+        request.downloadHandler = (DownloadHandler)new DownloadHandlerBuffer();
+        request.SetRequestHeader("Content-Type", "application/json");
 
-                if (request.result != UnityWebRequest.Result.Success)
-                {
-                    if (errorCallback != null)
-                    {
-                        errorCallback(request.error);
-                    }
-                    Debug.LogError(request.error);
-                }
-                else
-                {
-                    sucessCallback(request.downloadHandler.text);
-                }
+        // Set additional headers
+        if (headers != null)
+        {
+            foreach (KeyValuePair<string, string> header in headers)
+            {
+                request.SetRequestHeader(header.Key, header.Value);
             }
+        }
+        yield return request.SendWebRequest();
+        if (request.result != UnityWebRequest.Result.Success)
+        {
+            Debug.LogError(request.error);
+            errorCallback?.Invoke(request.error);
+        }
+        else
+        {
+            sucessCallback?.Invoke(request.downloadHandler.text);
+        }
+        request.Dispose();
     }
 
     public IEnumerator Put(string endpoint, Dictionary<string, string> headers, string jsonPayload, Action<string> sucessCallback, Action<string> errorCallback = null)
