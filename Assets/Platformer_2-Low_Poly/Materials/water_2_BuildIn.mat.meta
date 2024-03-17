@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 0cfbe2c09f7260f44ad1fd1dc741d1ce
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 271342
+  packageName: Platformer 2 - Low Poly
+  packageVersion: 1.1
+  assetPath: Assets/Platformer_2-Low_Poly/Materials/water_2_BuildIn.mat
+  uploadId: 633318

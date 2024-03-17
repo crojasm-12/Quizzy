@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: df6f63d004d8f854cb826936841bbd4b
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 9100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 271342
+  packageName: Platformer 2 - Low Poly
+  packageVersion: 1.1
+  assetPath: Assets/Platformer_2-Low_Poly/Animations/Controllers/Swing_Z.controller
+  uploadId: 633318

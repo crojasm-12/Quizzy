@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: d7eb39e6025551548b31e8d36c487b8a
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 9100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 271342
+  packageName: Platformer 2 - Low Poly
+  packageVersion: 1.1
+  assetPath: Assets/Platformer_2-Low_Poly/Animations/Controllers/Bomb.controller
+  uploadId: 633318

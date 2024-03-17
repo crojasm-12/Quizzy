@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 6774498aef2c721478f4ea315732ab2a
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 7400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 271342
+  packageName: Platformer 2 - Low Poly
+  packageVersion: 1.1
+  assetPath: Assets/Platformer_2-Low_Poly/Animations/Anim/Rotation_Z_minus.anim
+  uploadId: 633318

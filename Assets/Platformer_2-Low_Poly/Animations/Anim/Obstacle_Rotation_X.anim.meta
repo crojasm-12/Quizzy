@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: f0ba4b9ca1755d84dae18bf5fdd560da
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 7400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 271342
+  packageName: Platformer 2 - Low Poly
+  packageVersion: 1.1
+  assetPath: Assets/Platformer_2-Low_Poly/Animations/Anim/Obstacle_Rotation_X.anim
+  uploadId: 633318
