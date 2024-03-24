@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 247f1170f8b404d6987ad631e0e2fa0f
+timeCreated: 1476988509
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 74020
+  packageName: Cartoon Town - Low Poly Assets
+  packageVersion: 1.4.2
+  assetPath: Assets/CartoonTown-LowPolyAssets/Animations/Train/TrainMoveIdle.anim
+  uploadId: 613715

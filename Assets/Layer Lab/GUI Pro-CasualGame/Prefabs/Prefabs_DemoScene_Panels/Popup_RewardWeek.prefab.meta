@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: e2fa8634516fa48b1be8bec929fd9cf9
+guid: 8fdadb506c7e24b0883e00116d9aa5f3
 PrefabImporter:
   externalObjects: {}
   userData: 
@@ -9,6 +9,6 @@ AssetOrigin:
   serializedVersion: 1
   productId: 176695
   packageName: GUI Pro - Casual Game
-  packageVersion: 3.0.1
+  packageVersion: 4.0.1
   assetPath: Assets/Layer Lab/GUI Pro-CasualGame/Prefabs/Prefabs_DemoScene_Panels/Popup_RewardWeek.prefab
-  uploadId: 630624
+  uploadId: 650402

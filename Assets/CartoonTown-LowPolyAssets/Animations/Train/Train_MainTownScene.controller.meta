@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: f09bfce19df7742e68387a93e2244097
+timeCreated: 1477049016
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 74020
+  packageName: Cartoon Town - Low Poly Assets
+  packageVersion: 1.4.2
+  assetPath: Assets/CartoonTown-LowPolyAssets/Animations/Train/Train_MainTownScene.controller
+  uploadId: 613715

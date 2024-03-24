@@ -38,9 +38,11 @@ public class QuestionPanel : MonoBehaviour
 
     private float _questionValue = 0.15f;
 
+    private int _answerTries;
+
     private void Update()
     {
-        _elapsedTime += Time.deltaTime; 
+        _elapsedTime += Time.deltaTime;
 
         int hours = (int)(_elapsedTime / 3600);
         int minutes = (int)((_elapsedTime % 3600) / 60);
@@ -58,6 +60,13 @@ public class QuestionPanel : MonoBehaviour
     public void ShowPanel(FullSkill skill)
     {
         _skill = skill;
+
+        _elapsedTime = 0f;
+        _totalReward = 0f;
+        _totalQuestions = 0;
+        _totalCorrect = 0;
+        _activeQuestion = false;
+
         Panel.SetActive(true);
         ShowQuestion();
     }
@@ -81,20 +90,26 @@ public class QuestionPanel : MonoBehaviour
     {
         if (_skillQuestion != null &&
             _skillQuestion.answer != null &&
-            _skillQuestion.answer.content.Count > 0 &&
-            _activeQuestion)
+            _skillQuestion.answer.content.Count > 0)
         {
             if (_skillQuestion.answer.content[0] == answer)
             {
-                _totalCorrect++;
-                _totalReward += _questionValue;
+                if (_answerTries > 0 && _activeQuestion)
+                {
+                    // Only add points if the question is active.
+                    // Question is active if has not been answered.
+                    _totalCorrect++;
+                    _totalReward += (_questionValue / _answerTries);
+                }
                 AnswerFeedback.text = "Correct!!!";
                 AnswerFeedback.color = Color.green;
                 particlesEffect.SetActive(true);
                 tadaaAudio.PlayAudio();
+                _activeQuestion = false; // Question has been ansered, disable question.
             }
             else
             {
+                _answerTries++;
                 failAudio.PlayAudio();
                 AnswerFeedback.text = "Wrong!!!";
                 AnswerFeedback.color = Color.red;
@@ -102,7 +117,6 @@ public class QuestionPanel : MonoBehaviour
             AnswerFeedback.gameObject.SetActive(true);
             StartCoroutine(HideAnswerFeedback(_delay));
         }
-        _activeQuestion = false;
     }
 
     private IEnumerator HideAnswerFeedback(float delay)
@@ -130,17 +144,20 @@ public class QuestionPanel : MonoBehaviour
                 {
                     SkillQuestionRespose skillQuestionResponse = JsonUtility.FromJson<SkillQuestionRespose>(response);
                     _skillQuestion = skillQuestionResponse.data;
-                    Question.text = _skillQuestion.question.content[0];
+                    Question.text = _skillQuestion?.question?.content[0];
                     if (_skillQuestion.type == "MultipleChoice")
                     {
                         answerChoices.ShowChoices(_skillQuestion.choice.content);
                     }
+                    _answerTries = 1;
                     _activeQuestion = true;
                     _totalQuestions++;
                 }
                 catch (Exception e)
                 {
                     _skillQuestion = null;
+                    _answerTries = 0;
+                    _activeQuestion = false;
                     toastPanel.ShowError(e.ToString());
                     Debug.Log(e.ToString());
                 }
@@ -148,6 +165,8 @@ public class QuestionPanel : MonoBehaviour
             (error) =>
             {
                 _skillQuestion = null;
+                _answerTries = 0;
+                _activeQuestion = false;
                 Debug.LogError($"Error reading skillQuestion: ${error}");
             }
         ));

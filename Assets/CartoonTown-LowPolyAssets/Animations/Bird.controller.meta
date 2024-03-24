@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 5d6d8976253be4da09f7fa411b338131
+timeCreated: 1476989815
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 74020
+  packageName: Cartoon Town - Low Poly Assets
+  packageVersion: 1.4.2
+  assetPath: Assets/CartoonTown-LowPolyAssets/Animations/Bird.controller
+  uploadId: 613715

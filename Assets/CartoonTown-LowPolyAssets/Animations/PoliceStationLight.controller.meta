@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: f33bca6cab6c14977a676872ab3af453
+timeCreated: 1477556981
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 74020
+  packageName: Cartoon Town - Low Poly Assets
+  packageVersion: 1.4.2
+  assetPath: Assets/CartoonTown-LowPolyAssets/Animations/PoliceStationLight.controller
+  uploadId: 613715

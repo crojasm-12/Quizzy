@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: ceae1f868ebf84b63b87078bde2dfa6e
+timeCreated: 1476987747
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 74020
+  packageName: Cartoon Town - Low Poly Assets
+  packageVersion: 1.4.2
+  assetPath: Assets/CartoonTown-LowPolyAssets/Animations/Clock/Clock_Hours.controller
+  uploadId: 613715

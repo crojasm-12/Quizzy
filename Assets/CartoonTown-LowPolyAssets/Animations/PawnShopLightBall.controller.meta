@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: d02ee7671c8a74bc6995423a4d9475ae
+timeCreated: 1477557662
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 74020
+  packageName: Cartoon Town - Low Poly Assets
+  packageVersion: 1.4.2
+  assetPath: Assets/CartoonTown-LowPolyAssets/Animations/PawnShopLightBall.controller
+  uploadId: 613715

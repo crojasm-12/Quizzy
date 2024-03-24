@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 50b370fb6d6034108a97a49132a6ecd9
+timeCreated: 1476988764
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 74020
+  packageName: Cartoon Town - Low Poly Assets
+  packageVersion: 1.4.2
+  assetPath: Assets/CartoonTown-LowPolyAssets/Animations/BalloonBox/GreenBalloon.controller
+  uploadId: 613715

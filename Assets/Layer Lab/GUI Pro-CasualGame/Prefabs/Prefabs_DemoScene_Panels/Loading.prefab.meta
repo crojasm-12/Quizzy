@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 977455f60ffab407d826c488d344d241
+guid: b9678d8d5a73e48e39dc63c059680e11
 PrefabImporter:
   externalObjects: {}
   userData: 
@@ -9,6 +9,6 @@ AssetOrigin:
   serializedVersion: 1
   productId: 176695
   packageName: GUI Pro - Casual Game
-  packageVersion: 3.0.1
+  packageVersion: 4.0.1
   assetPath: Assets/Layer Lab/GUI Pro-CasualGame/Prefabs/Prefabs_DemoScene_Panels/Loading.prefab
-  uploadId: 630624
+  uploadId: 650402
