@@ -1,5 +1,13 @@
 using UnityEngine;
 
+
+/***************************
+ * 
+ * Quizzy Position Platform 1
+ * -139.1, 4, 78.61
+ * 
+ * 
+ * **************************/
 public class QuizzyMovement : MonoBehaviour
 {
     // Bindings
@@ -14,7 +22,7 @@ public class QuizzyMovement : MonoBehaviour
 
 
     [SerializeField] private float gravityMultiplier = 3.0f;
-    private float velocity;
+    private float velocity = 0.0f;
 
     // Input Values
     private float _horizontal;
@@ -23,31 +31,22 @@ public class QuizzyMovement : MonoBehaviour
     private Vector3 _originalPosition;
     private Quaternion _originalRotation;
 
+    // I need to keep in memory what is the direction of the character.
+    private Vector3 _currentDirection;
+
     private void Start()
     {
+        controller.enabled = false;
         _originalPosition = transform.position;
         _originalRotation = transform.rotation;
-
-        Debug.Log($"Original Position: {_originalRotation.x}, {_originalRotation.y}, {_originalRotation.z}");
+        _currentDirection = transform.forward;
+        controller.enabled = true;
+        Debug.Log($"Original Position: {_originalPosition.x}, {_originalPosition.y}, {_originalPosition.z}");
     }
 
 
     void Update()
     {
-        /*
-        foreach (Touch touch in Input.touches)
-        {
-            Vector2 touchPosition = touch.position;
-            if (UltimateJoystick.FindObjectsByType<Joy(touchPosition))
-            {
-                // Process joystick movement
-            }
-            else
-            {
-                // Ignore touches outside the joystick area
-            }
-        }
-        */
         _horizontal = UltimateJoystick.GetHorizontalAxis("LeftJoystick");
         _vertical = UltimateJoystick.GetVerticalAxis("LeftJoystick");
 
@@ -60,8 +59,8 @@ public class QuizzyMovement : MonoBehaviour
         hitDirection = hitDirection.normalized;
 
         // Adjust these values as needed
-        float forceMagnitude = 100f; // The amount of force to apply
-        //hitDirection.y = 0; // Assuming you don't want to add force in the Y direction
+        float forceMagnitude = 300f; // The amount of force to apply
+        hitDirection.y = 0; // Assuming you don't want to add force in the Y direction
 
         // Apply the force
         rigidBody.AddForce(hitDirection * forceMagnitude);
@@ -71,27 +70,27 @@ public class QuizzyMovement : MonoBehaviour
     private void UpdatePosition()
     {
         //Debug.Log($"Location: {_horizontal}, {_vertical}");
-        Vector3 direction = new Vector3(-_horizontal , 0, -_vertical);
+        Vector3 direction = new Vector3(-_horizontal, 0, -_vertical);
         float magnitude = Mathf.Clamp01(direction.magnitude);
 
+        Vector3 movementDirection;
+        direction.Normalize();
+        _currentDirection = direction;
         if (magnitude > 0.2f)
         {
-            direction.Normalize();
-
-            Quaternion toRotation = Quaternion.LookRotation(direction, Vector3.up);
+            Quaternion toRotation = Quaternion.LookRotation(_currentDirection, Vector3.up);
             transform.rotation = Quaternion.RotateTowards(transform.rotation, toRotation, rotationSpeed * Time.deltaTime);
-
-            if (controller.isGrounded && velocity <= 0.0f)
-            {
-                velocity = 0.0f;
-            }
-            else
-            {
-                velocity += gravity * gravityMultiplier * Time.deltaTime;
-            }
-            direction.y = velocity;
-            controller.Move(direction * magnitude * speed * Time.deltaTime);
         }
+        movementDirection = _currentDirection;
+        if (controller.isGrounded)
+        {
+            movementDirection.y = -200.0f;
+        }
+        else
+        {
+            movementDirection.y += gravity * gravityMultiplier * Time.deltaTime;
+        }
+        controller.Move(movementDirection * magnitude * speed * Time.deltaTime);
 
         if (magnitude == 0.0f)
         {
@@ -108,14 +107,11 @@ public class QuizzyMovement : MonoBehaviour
 
         if (transform.position.y < 0.0f)
         {
+            controller.enabled = false; // Temporarily disable to reset position
+            transform.position = _originalPosition;
             transform.rotation = _originalRotation;
-            transform.position = new Vector3(-139.1f, 4.0f, 78.61f);
-
-            //Vector3 localPosition = transform.InverseTransformPoint(new Vector3(-139.1f, 4.0f, 78.61f));
-            //controller.Move(localPosition);
-            //transform.position = new Vector3(localPosition.x, localPosition.y, localPosition.z);
-            //transform.transform.localPosition = localPosition;
-            //controller.Move(_originalPosition);
+            controller.enabled = true; // Re-enable the controller
+            //_velocity = Vector3.zero;
         }
 
     }
